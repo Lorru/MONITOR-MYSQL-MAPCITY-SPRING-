@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh" content="5" >
+    <title>Monitor - MySQL</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/AdminLTE.min.css}">
+    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}">
+</head>
+<body>
+    <div class="container">
+        <section class="bg-dark text-white">
+            <section class="content text-dark">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fas fa-tachometer-alt"></i> Monitor de procesos MySQL - 172.16.2.250</h3>
+                    </div>
+                    <div class="box-body">
+	                    <div class="table-responsive">
+	                   		<table class="table table-bordered table-striped" style="font-size:10px">
+		                   		<thead>
+		                            <th><i class="fas fa-user"></i> Usuario</th>
+		                            <th><i class="fas fa-desktop"></i> Host</th>
+		                            <th><i class="fas fa-database"></i> Base de datos</th>
+		                            <th><i class="fas fa-clock"></i> Tiempo</th>
+		                            <th><i class="fas fa-signal"></i> Estado</th>
+		                            <th><i class="fas fa-align-left"></i> Descripcion</th>
+		                            <th><i class="fas fa-question"></i> Query</th>
+		                        </thead>
+		                        <tbody>
+		                            <tr th:each="process: ${processList}" th:switch="${process.state}">
+		                            	<td th:text="${process.user}"></td>
+		                                <td th:text="${process.host}"></td>
+		                                <td th:text="${process.db}"></td>
+		                                <td th:text="${process.time}"></td>
+		                                <td th:text="${process.state}"></td>
+		                                <td th:case="'After create'" th:text="'Esto ocurre cuando el subproceso crea una tabla (incluidas las tablas temporales internas), al final de la función que crea la tabla.'"></td>
+		                                <td th:case="'Analyzing'" th:text="'El hilo está calculando las distribuciones de la clave de la tabla MyISAM (por ejemplo, para ANALYZE TABLE ).'"></td>
+		                                <td th:case="'checking permissions'" th:text="'El hilo está comprobando si el servidor tiene los privilegios necesarios para ejecutar la declaración.'"></td>
+		                                <td th:case="'hecking table'" th:text="'El hilo está realizando una operación de verificación de tabla.'"></td>
+		                                <td th:case="'cleaning up'" th:text="'El subproceso ha procesado un comando y se está preparando para liberar memoria y restablecer ciertas variables de estado.'"></td>
+		                                <td th:case="'closing tables'" th:text="'El hilo está descargando los datos de la tabla modificada al disco y cerrando las tablas usadas.'"></td>
+		                                <td th:case="'converting HEAP to ondisk'" th:text="'El hilo está convirtiendo una tabla temporal interna de una tabla MEMORY a una tabla en disco.'"></td>
+		                                <td th:case="'copy to tmp table'" th:text="'El hilo está procesando una instrucción ALTER TABLE.'"></td>
+		                                <td th:case="'Copying to group table'" th:text="'Si una instrucción tiene diferentes criterios ORDER BY y GROUP BY , las filas se ordenan por grupo y se copian en una tabla temporal.'"></td>
+		                                <td th:case="'Copying to tmp table'" th:text="'El servidor está copiando a una tabla temporal en la memoria.'"></td>
+		                                <td th:case="'altering table'" th:text="'El servidor está en proceso de ejecutar una ALTER TABLE en el lugar.'"></td>
+		                                <td th:case="'Copying to tmp table on disk'" th:text="'El servidor está copiando a una tabla temporal en el disco.'"></td>
+		                                <td th:case="'Creating index'" th:text="'El hilo está procesando ALTER TABLE ... ENABLE KEYS para una tabla MyISAM .'"></td>
+		                                <td th:case="'Creating sort index'" th:text="'El hilo está procesando un SELECT que se resuelve usando una tabla temporal interna.'"></td>
+		                                <td th:case="'creating table'" th:text="'El hilo está creando una tabla. Esto incluye la creación de tablas temporales.'"></td>
+		                                <td th:case="'Creating tmp table'" th:text="'El hilo está creando una tabla temporal en la memoria o en el disco.'"></td>
+		                                <td th:case="'committing alter table to storage engine'" th:text="'El servidor ha terminado una ALTER TABLE en el lugar y está confirmando el resultado.'"></td>
+		                                <td th:case="'deleting from main table'" th:text="'El servidor está ejecutando la primera parte de una eliminación de varias tablas.'"></td>
+		                                <td th:case="'deleting from reference tables'" th:text="'El servidor está ejecutando la segunda parte de una eliminación de tablas múltiples y eliminando las filas coincidentes de las otras tablas.'"></td>
+		                                <td th:case="'discard_or_import_tablespace'" th:text="'El hilo está procesando una ALTER TABLE ... DISCARD TABLESPACE o ALTER TABLE ... IMPORT TABLESPACE statement.'"></td>
+		                                <td th:case="'end'" th:text="'Esto ocurre al final, pero antes de la limpieza de las INSERT ALTER TABLE , CREATE VIEW , DELETE , INSERT , SELECT o UPDATE .'"></td>
+		                                <td th:case="'executing'" th:text="'El hilo ha comenzado a ejecutar una declaración.'"></td>
+		                                <td th:case="'Execution of init_command'" th:text="'El hilo está ejecutando sentencias en el valor de la variable del sistema init_command .'"></td>
+		                                <td th:case="'freeing items'" th:text="'El hilo ha ejecutado un comando.'"></td>
+		                                <td th:case="'FULLTEXT initialization'" th:text="'El servidor se está preparando para realizar una búsqueda de texto completo en lenguaje natural.'"></td>
+		                                <td th:case="'init'" th:text="'Esto ocurre antes de la inicialización de las INSERT ALTER TABLE , DELETE , INSERT , SELECT o UPDATE .'"></td>
+		                                <td th:case="'Killed'" th:text="'Alguien ha enviado una declaración KILL al hilo y debería abortar la próxima vez que verifique el indicador de matar.'"></td>
+		                                <td th:case="'logging slow query'" th:text="'El hilo está escribiendo una declaración en el registro de consulta lenta.'"></td>
+		                                <td th:case="'login'" th:text="'El estado inicial de un hilo de conexión hasta que el cliente haya sido autenticado con éxito.'"></td>
+		                                <td th:case="'manage keys'" th:text="'El servidor habilita o deshabilita un índice de tabla.'"></td>
+		                                <td th:case="'NULL'" th:text="'Este estado se usa para el estado SHOW PROCESSLIST .'"></td>
+		                                <td th:case="'Opening tables'" th:text="'El hilo está tratando de abrir una mesa.'"></td>
+		                                <td th:case="'optimizing'" th:text="'El servidor está realizando optimizaciones iniciales para una consulta.'"></td>
+		                                <td th:case="'preparing'" th:text="'Este estado ocurre durante la optimización de la consulta.'"></td>
+		                                <td th:case="'Purging old relay logs'" th:text="'El hilo está eliminando los archivos de registro de retransmisión innecesarios.'"></td>
+		                                <td th:case="'query end'" th:text="'Este estado se produce después de procesar una consulta, pero antes de que se freeing items .'"></td>
+		                                <td th:case="'Receiving from client'" th:text="'El servidor está leyendo un paquete del cliente. Este estado se llama Reading from net antes de MySQL 5.7.8.'"></td>
+		                                <td th:case="'Removing duplicates'" th:text="'La consulta usaba SELECT DISTINCT de tal manera que MySQL no podía optimizar la operación distinta en una etapa temprana.'"></td>
+		                                <td th:case="'removing tmp table'" th:text="'El hilo está eliminando una tabla temporal interna después de procesar una instrucción SELECT .'"></td>
+		                                <td th:case="'rename'" th:text="'El hilo está cambiando el nombre de una tabla.'"></td>
+		                                <td th:case="'rename result table'" th:text="'El hilo está procesando una instrucción ALTER TABLE , ha creado la nueva tabla y la está cambiando el nombre para reemplazar la tabla original.'"></td>
+		                                <td th:case="'Reopen tables'" th:text="'El hilo obtuvo un bloqueo para la tabla, pero se dio cuenta después de obtener el bloqueo que la estructura de la tabla subyacente cambió.'"></td>
+		                                <td th:case="'Repair by sorting'" th:text="'El código de reparación usa una ordenación para crear índices.'"></td>
+		                                <td th:case="'preparing for alter table'" th:text="'El servidor se está preparando para ejecutar una ALTER TABLE .'"></td>
+		                                <td th:case="'Repair done'" th:text="'El hilo ha completado una reparación de subprocesos múltiples para una tabla MyISAM .'"></td>
+		                                <td th:case="'Repair with keycache'" th:text="'El código de reparación está utilizando la creación de claves una por una a través de la memoria caché de claves.'"></td>
+		                                <td th:case="'Rolling back'" th:text="'El hilo está retrotrayendo una transacción.'"></td>
+		                                <td th:case="'Saving state'" th:text="'Para las operaciones de la tabla MyISAM , como la reparación o el análisis, el hilo está guardando el nuevo estado de la tabla en el .MYI archivo .MYI .'"></td>
+		                                <td th:case="'Searching rows for update'" th:text="'El hilo está haciendo una primera fase para encontrar todas las filas coincidentes antes de actualizarlas.'"></td>
+		                                <td th:case="'Sending data'" th:text="'El hilo está leyendo y procesando filas para una instrucción SELECT y enviando datos al cliente.'"></td>
+		                                <td th:case="'Sending to client'" th:text="'El servidor está escribiendo un paquete para el cliente.'"></td>
+		                                <td th:case="'setup'" th:text="'El hilo está comenzando una operación ALTER TABLE .'"></td>
+		                                <td th:case="'Sorting for group'" th:text="'El hilo está haciendo un género para satisfacer un GROUP BY .'"></td>
+		                                <td th:case="'Sorting for order'" th:text="'El hilo está haciendo una especie para satisfacer un ORDER BY .'"></td>
+		                                <td th:case="'Sorting index'" th:text="'El hilo está ordenando páginas de índice para un acceso más eficiente durante una operación de optimización de tabla MyISAM .'"></td>
+		                                <td th:case="'Sorting result'" th:text="'Para una instrucción SELECT , esto es similar a Creating sort index , pero para las tablas no temporales.'"></td>
+		                                <td th:case="'statistics'" th:text="'El servidor está calculando estadísticas para desarrollar un plan de ejecución de consultas.'"></td>
+		                                <td th:case="'System lock'" th:text="'El hilo ha llamado a mysql_lock_tables() y el estado del hilo no se ha actualizado desde entonces.'"></td>
+		                                <td th:case="'update'" th:text="'El hilo se está preparando para comenzar a actualizar la tabla.'"></td>
+		                                <td th:case="'Updating'" th:text="'El hilo está buscando filas para actualizar y las está actualizando.'"></td>
+		                                <td th:case="'updating main table'" th:text="'El servidor está ejecutando la primera parte de una actualización de varias tablas.'"></td>
+		                                <td th:case="'updating reference tables'" th:text="'El servidor está ejecutando la segunda parte de una actualización de varias tablas y está actualizando las filas coincidentes de las otras tablas.'"></td>
+		                                <td th:case="'User lock'" th:text="'El hilo va a solicitar o está esperando un bloqueo de aviso solicitado con una llamada GET_LOCK() .'"></td>
+		                                <td th:case="'User sleep'" th:text="'El hilo ha invocado una llamada SLEEP() .'"></td>
+		                                <td th:case="'Waiting for commit lock'" th:text="'FLUSH TABLES WITH READ LOCK están esperando un bloqueo de confirmación.'"></td>
+		                                <td th:case="'Waiting for global read lock'" th:text="'FLUSH TABLES WITH READ LOCK está esperando un bloqueo de lectura global o se está configurando la variable global del sistema read_only .'"></td>
+		                                <td th:case="'Waiting for tables'" th:text="'El hilo recibió una notificación de que la estructura subyacente de una tabla ha cambiado y necesita volver a abrir la tabla para obtener la nueva estructura.'"></td>
+		                                <td th:case="'Waiting for table flush'" th:text="'El subproceso está ejecutando FLUSH TABLES y está esperando que todos los subprocesos cierren sus tablas, o el subproceso recibe una notificación de que la estructura subyacente de una tabla ha cambiado y necesita volver a abrir la tabla para obtener la nueva estructura.'"></td>
+		                                <td th:case="'Waiting for lock_type lock'" th:text="'El servidor está esperando adquirir un bloqueo THR_LOCK o un bloqueo del subsistema de bloqueo de metadatos, donde lock_type indica el tipo de bloqueo.'"></td>
+		                                <td th:case="'Waiting for table level lock'" th:text="'Este estado indica esperar por THR_LOCK'"></td>
+		                                <td th:case="'Waiting for event metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for global read lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for schema metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for stored function metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for stored procedure metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for table metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting for trigger metadata lock'" th:text="'Este estado indica una espera para un bloqueo de metadatos'"></td>
+		                                <td th:case="'Waiting on cond'" th:text="'Un estado genérico en el cual el hilo está esperando que una condición se vuelva verdadera.'"></td>
+		                                <td th:case="'Writing to net'" th:text="'El servidor está escribiendo un paquete en la red.'"></td>
+		                                <td th:case="'Filling schema table'" th:text="'El servidor está ejecutando una instruccion SELECT a la tabla esquema. '"></td>
+		                                <td th:text="${process.info}"></td>
+		                            </tr>
+		                         </tbody>
+	                       	</table>
+	                    </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/fontawesome-all.min.js}"></script>
+</body>
+</html>
